@@ -98,10 +98,10 @@ const getUsers = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const id = req.params.id
-    const user = await User.findById(id).select('-password')
+    const name = req.params.name
+    const user = await User.findOne({ name }).select('-password')
     if (!user || user.isDeleted) {
-      return res.status(404).json({ errors: [{ msg: `User with id ${id} doesn't exist` }] })
+      return res.status(404).json({ errors: [{ msg: `User with name ${name} doesn't exist` }] })
     }
     res.status(200).json(user)
   } catch (err) {
@@ -112,13 +112,12 @@ const getUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { name, email, password, phone } = req.body
-    const id = req.params.id
-    const user = await User.findById(id)
+    const { email, password, phone } = req.body
+    const name = req.params.name
+    const user = await User.findOne({ name })
     if (!user || user.isDeleted) {
-      return res.status(404).json({ errors: [{ msg: `User with id ${id} doesn't exist` }] })
+      return res.status(404).json({ errors: [{ msg: `User with name ${name} doesn't exist` }] })
     }
-    if (name) user.name = name
     if (email) user.email = email
     if (password) user.password = password
     if (phone) user.phone = phone
@@ -132,7 +131,8 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id)
+    const name = req.params.name
+    const user = await User.findOne({ name })
     if (!user || user.isDeleted) {
       return res.status(404).json({ errors: [{ msg: 'User not found' }] })
     }
