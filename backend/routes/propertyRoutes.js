@@ -1,4 +1,5 @@
 const express = require('express')
+const { authenticateUser } = require('../controllers/userController')
 const { getProperties,
   getProperty,
   postProperty,
@@ -9,8 +10,8 @@ const router = express.Router()
 
 router.get('/', getProperties)
 router.get('/:id', getProperty)
-router.post('/', postProperty)
-router.put('/:id', updateProperty)
-router.delete('/:id', deleteProperty)
+router.post('/', authenticateUser, postProperty)
+router.put('/:id', authenticateUser, updateProperty)
+router.delete('/:id', authenticateUser, deleteProperty)
 
 module.exports = router
