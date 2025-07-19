@@ -12,6 +12,6 @@ router.get('/', getProperties)
 router.get('/:id', getProperty)
 router.post('/', authenticateUser, postProperty)
 router.put('/:id', authenticateUser, updateProperty)
-router.delete('/:id', authenticateUser, deleteProperty)
+router.delete('/:id/', authenticateUser, deleteProperty)
 
 module.exports = router

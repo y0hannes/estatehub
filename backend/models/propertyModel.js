@@ -70,6 +70,24 @@ const propertySchema = new mongoose.Schema({
     ref: 'User',
     required: [true, 'Seller is required'],
   },
+  rating: {
+  totalRatingSum: {
+    type: Number,
+    default: 0,
+    min: [0, 'Total rating sum cannot be negative'],
+  },
+  ratingCount: {
+    type: Number,
+    default: 0,
+    min: [0, 'Rating count cannot be negative'],
+  },
+  averageRating: {
+    type: Number,
+    get: function () {
+      return this.ratingCount > 0 ? (this.totalRatingSum / this.ratingCount).toFixed(1) : 0
+    },
+  },
+},
   isDeleted: {
     type: Boolean,
     default: false,
