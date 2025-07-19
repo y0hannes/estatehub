@@ -5,11 +5,11 @@ const { getInteractions,
   deleteInteraction
 } = require('../controllers/interactionController')
 
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 
-router.get('/:id', getInteractions)
-router.post('/:id', authenticateUser, createInteraction)
-router.put('/:id', authenticateUser, createInteraction)
-router.delete('/:id/:type', authenticateUser, deleteInteraction)
+router.get('', getInteractions)
+router.post('', authenticateUser, createInteraction)
+router.put('', authenticateUser, createInteraction)
+router.delete('/:type', authenticateUser, deleteInteraction)
 
 module.exports = router

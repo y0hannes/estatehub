@@ -13,5 +13,6 @@ router.get('/:id', getProperty)
 router.post('/', authenticateUser, postProperty)
 router.put('/:id', authenticateUser, updateProperty)
 router.delete('/:id/', authenticateUser, deleteProperty)
+router.use('/:id/interaction', require('./interactionRoutes'))
 
 module.exports = router
