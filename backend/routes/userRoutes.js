@@ -8,6 +8,7 @@ const { registerUser,
   logoutUser,
   authenticateUser
 } = require('../controllers/userController')
+const { getWishlist } = require('../controllers/interactionController')
 
 const router = express.Router()
 router.post('/register', registerUser)
@@ -17,5 +18,6 @@ router.get('/', authenticateUser, getUsers)
 router.get('/:name', authenticateUser, getUser)
 router.put('/:name', authenticateUser, updateUser)
 router.delete('/:name', authenticateUser, deleteUser)
+router.get('/:name/wishlist', authenticateUser, getWishlist)
 
 module.exports = router

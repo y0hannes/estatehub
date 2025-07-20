@@ -13,7 +13,7 @@ const interactionSchema = new mongoose.Schema({
   },
   type: { 
     type: String, 
-    enum: ['rating', 'comment'], 
+    enum: ['rating', 'comment', 'wishlist'], 
     required: true 
   },
   rating: { 

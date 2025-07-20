@@ -67,4 +67,15 @@ const deleteInteraction = asyncHandler(async (req, res) => {
   res.json({ message: 'Interaction deleted successfully' })
 })
 
-module.exports = { getInteractions, createInteraction, deleteInteraction }
+const getWishlist = asyncHandler(async (req, res) => {
+  const user = req.user.id
+  const type = 'wishlist'
+  const wishlist = await Interaction.find({ user, type })
+  .populate({
+    path: 'property',
+    select: 'title description price'
+  })
+  res.status(200).json(wishlist)
+})
+
+module.exports = { getInteractions, createInteraction, deleteInteraction, getWishlist }
