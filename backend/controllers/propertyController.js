@@ -26,17 +26,19 @@ const getProperty = async (req, res) => {
 }
 
 const postProperty = async (req, res) => {
-  const { title, description, price, location, type, features } = req.body
+  // const { title, description, price, location, type, features } = req.body
+  const { title, description, price } = req.body
   try {
     const property = new Property({
       title,
       description,
       price,
-      location,
-      type,
-      features,
-      status: 'for sale',
+      // location,
+      // type,
+      // features,
+      // status: 'for sale',
       seller: req.user.id,
+      image: req.file ? req.file.path : null,
       isDeleted: false
     })
     await property.save()
@@ -58,12 +60,14 @@ const updateProperty = async (req, res) => {
     if (!property.seller.equals(req.user.id)) {
       return res.status(403).json({ errors: [{ msg: 'Only Sellers can update' }] })
     }
+
     if (title) property.title = title
     if (description) property.description = description
     if (price) property.price = price
     if (location) property.location = location
     if (type) property.type = type
     if (features) property.features = features
+    if (req.file) property.image = req.file.path
 
     await property.save()
     res.status(200).json(property)

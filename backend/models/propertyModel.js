@@ -19,52 +19,51 @@ const propertySchema = new mongoose.Schema({
     required: [true, 'Price is required'],
     min: [0, 'Price cannot be negative'],
   },
-  location: {
-      city: {
-        type: String,
-        required: [true, 'City is required'],
-        enum: ['Addis Abeba'],
-      },
-      subcity: {
-        type: String,
-        required: [true, 'Subcity is required'],
-        enum: [
-          'Addis Ketema',
-          'Akaky Kaliti',
-          'Arada',
-          'Bole',
-          'Gullele',
-          'Kirkos',
-          'Kolfe Keranio',
-          'Lideta',
-          'Nifas Silk-Lafto',
-          'Yeka',
-          'Lemi-Kura',
-        ],
-      },
-      description: {
-        type: String,
-      },
-    },
-  type: {
+  // location: {
+  //     city: {
+  //       type: String,
+  //       required: [true, 'City is required'],
+    //     enum: ['Addis Abeba'],
+    //   },
+    //   subcity: {
+    //     type: String,
+    //     required: [true, 'Subcity is required'],
+    //     enum: [
+    //       'Addis Ketema',
+    //       'Akaky Kaliti',
+    //       'Arada',
+    //       'Bole',
+    //       'Gullele',
+    //       'Kirkos',
+    //       'Kolfe Keranio',
+    //       'Lideta',
+    //       'Nifas Silk-Lafto',
+    //       'Yeka',
+    //       'Lemi-Kura',
+    //     ],
+    //   },
+    //   description: {
+    //     type: String,
+    //   },
+    // },
+  // type: {
+  //   type: String,
+  //   enum: ['house', 'apartment', 'condo', 'land', 'commercial'],
+  //   required: [true, 'Property type is required'],
+  // },
+  // features: {
+  //   bedrooms: { type: Number, min: [0, 'Bedrooms cannot be negative'] },
+  //   bathrooms: { type: Number, min: [0, 'Bathrooms cannot be negative'] },
+  //   areaSqFt: { type: Number, min: [0, 'Area cannot be negative'] },
+  // },
+  // status: {
+  //   type: String,
+  //   enum: ['for sale', 'sold'],
+  //   default: 'for sale'
+  // },
+  image: {
     type: String,
-    enum: ['house', 'apartment', 'condo', 'land', 'commercial'],
-    required: [true, 'Property type is required'],
   },
-  features: {
-    bedrooms: { type: Number, min: [0, 'Bedrooms cannot be negative'] },
-    bathrooms: { type: Number, min: [0, 'Bathrooms cannot be negative'] },
-    areaSqFt: { type: Number, min: [0, 'Area cannot be negative'] },
-  },
-  status: {
-    type: String,
-    enum: ['for sale', 'sold'],
-    default: 'for sale'
-  },
-  // images: [{
-  //   url: { type: String, required: [true, 'Image URL is required'] },
-  //   publicId: { type: String },
-  // }],
   seller: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

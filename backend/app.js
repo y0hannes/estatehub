@@ -1,6 +1,7 @@
 const express = require('express')
 const dotenv = require('dotenv')
 const connectDB = require('./config/db')
+const upload = require('./middleware/upload')
 
 dotenv.config()
 
@@ -8,6 +9,10 @@ const app = express()
 
 connectDB()
 
+app.use(upload)
+app.use('/public', express.static('public'))
+
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
 app.get('/', (req, res) => {
