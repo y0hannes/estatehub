@@ -2,8 +2,7 @@ const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 require('dotenv').config()
-
-let blacklistedTokens = []
+const redisClient = require('../config/redis');
 
 const registerUser = async (req, res) => {
   const { name, email, password, role, phone } = req.body
@@ -57,7 +56,11 @@ const logoutUser = async (req, res) => {
     if (!token) {
       return res.status(400).json({ message: 'Access token required for logout' })
     }
-    blacklistedTokens.push(token)
+    const decoded = jwt.decode(token);
+    if (decoded && decoded.exp) {
+      const expiry = decoded.exp - Math.floor(Date.now() / 1000);
+      await redisClient.set(token, 'blacklisted', { EX: expiry });
+    }
     res.json({ message: 'Logged out successfully' })
   } catch (err) {
     console.error(err)
@@ -65,25 +68,30 @@ const logoutUser = async (req, res) => {
   }
 }
 
-const authenticateUser = (req, res, next) => {
+const authenticateUser = async (req, res, next) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
   if (!token) {
     return res.status(401).json({ message: 'Token required' })
   }
-  if (blacklistedTokens.includes(token)) {
-    return res.status(403).json({ message: 'Token has been invalidated' })
-  }
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
-    if (err) {
-      if (err.name === 'TokenExpiredError') {
-        blacklistedTokens = blacklistedTokens.filter(t => t !== token)
-      }
-      return res.status(403).json({ message: 'Invalid or expired token' })
+
+  try {
+    const isBlacklisted = await redisClient.get(token);
+    if (isBlacklisted) {
+      return res.status(403).json({ message: 'Token has been invalidated' });
     }
-    req.user = user
-    next()
-  })
+
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+      if (err) {
+        return res.status(403).json({ message: 'Invalid or expired token' })
+      }
+      req.user = user
+      next()
+    })
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
 }
 
 const getUsers = async (req, res) => {
